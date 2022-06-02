@@ -37,7 +37,7 @@ function SelectionForm({index}) {
             <option value="Beden 2">Beden 2</option>
             <option value="Beden 3">Beden 3</option>
           </select>
-          <p>{errors[`${index}-brand`]?.message}</p>
+          <p>{errors[`${index}-size`]?.message}</p>
         </div>
 
         <div className='my-4'>
@@ -65,6 +65,7 @@ function SelectionForm({index}) {
               }}
               onSearch={function noRefCheck(){}}
               onSelect={(event) => {
+                console.log(event);
                 setSelect(select => ({...select, [`${index}-select`]: [...event] }));
               }}
               options={content}

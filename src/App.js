@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import CustomerForm from './components/CustomerForm';
 import ProductComponent from './components/ProductComponent';
 import Form from './components/Form';
@@ -6,16 +6,21 @@ import {useForm} from 'react-hook-form';
 // import Test2 from './components/Test2';
 import {SelectProvider} from './context/SelectContext';
 import {ProductDesignProvider} from './context/ProductDesignContext';
+import ProductContext from './context/ProductContext';
 
 
 function App() {
-  const [product, setProduct] = useState([]);
+  const {product, setProduct} = useContext(ProductContext);
   const [ct, setCt] = useState(1);
   const methods = useForm();
 
   const handleClick = () => {
-    setProduct(product => [...product, {id: ct}])
-    setCt(ct + 1);
+    setCt(prev => prev + 1);
+    const item = {
+      id: ct
+    }
+    setProduct(product => [...product, item]);
+    
   }
 
   return (
@@ -37,7 +42,7 @@ function App() {
             {product.map((item,index) => {
               return(
                 <div key={index}>
-                  <ProductComponent index={item.id} />
+                  <ProductComponent productId={item.id} productIndex={index} />
                 </div> 
               )
             })}

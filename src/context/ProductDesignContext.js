@@ -3,10 +3,9 @@ import {createContext, useState} from 'react';
 const ProductDesignContext = createContext();
 
 export const ProductDesignProvider = ({children}) => {
-    const [productDesign, setProductDesign] = useState([]);
-  
+    const [productDesignEvent, setProductDesignEvent] = useState([]);
 
-  const values = {productDesign, setProductDesign};
+  const values = {productDesignEvent, setProductDesignEvent};
 
   return <ProductDesignContext.Provider value={values}>{children}</ProductDesignContext.Provider>;
 };
