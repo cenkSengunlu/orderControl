@@ -1,56 +1,47 @@
-import React, {useState, useContext} from 'react';
-import ProductDesignContext from '../context/ProductDesignContext';
-import {useFormContext} from 'react-hook-form';
+import React from 'react';
+import justNumber from '../justNumber';
+import justText from '../justText';
 
-function Pricing({pricingId}) {
-  const {register, formState: {errors}} = useFormContext({mode:'onBlur',});
-  const {productDesignEvent} = useContext(ProductDesignContext);
-  const [price, setPrice] = useState(0);
+function Pricing({index, register, errors, watchAllFields}) {
+  const totalNumber = watchAllFields.products[`${index}`].productDesignItems.reduce((total, val) => total + parseInt(val.amount), 0);
+  const totalPrice = totalNumber && watchAllFields.products[`${index}`].pricing.price ? totalNumber * watchAllFields.products[`${index}`].pricing.price : 0;
 
-
-  const handleSetPrice = (e) => {
-    setPrice(e.target.value);
-  }
   return (
     <>
       <div className='flex flex-col items-start justify-center w-16'>
-        <input {...register (`${pricingId}-totalNumber`, {required: 'Toplam Adet Giriniz!'})} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"/>
-        <p className='text-red-500 font-semibold text-sm mt-1 text-center'>{errors[`${pricingId}-totalNumber`]?.message}</p>
+        <input readOnly {...register (`products[${index}].pricing.totalNumber`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"  value={totalNumber} />
       </div>
 
+      
+
+
       <div>
-        <select className='w-20 px-1 h-11 py-3' {...register(`${pricingId}-unitSize`, {required: 'Ölçü Seçiniz!'})}>
-          <option value="">Ölçü Yok</option>
-          <option value={'Ölçü 1'}>Ölçü 1</option>
-          <option value={'Ölçü 2'}>Ölçü 2</option>
-          <option value={'Ölçü 3'}>Ölçü 3</option>
-        </select>
-        <p className='text-red-500 font-semibold text-sm mt-1'>{errors[`${pricingId}-unitSize`]?.message}</p>
+        <input type="text" list="unitSizeData" className='w-28 px-3 h-11 py-3' {...register(`products[${index}].pricing.unitSize`, {required: 'Ölçü Seçiniz!'})} placeholder='Seçiniz...' onKeyPress={(event) => justText(event)} />
+        <datalist id="unitSizeData">
+          <option value={'Ölçü Bir'}>Ölçü Bir</option>
+          <option value={'Ölçü İki'}>Ölçü İki</option>
+          <option value={'Ölçü Üç'}>Ölçü Üç</option>
+        </datalist>
+        <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.pricing?.unitSize?.message}</p>
       </div>
 
       <div className='flex flex-col items-start justify-center w-16'>
-        <input {...register (`${pricingId}-price`, {required: 'Fiyat Giriniz!', onChange: (e) => handleSetPrice(e) })} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"/>
-        <p className='text-red-500 font-semibold text-sm mt-1 text-center'>{errors[`${pricingId}-price`]?.message}</p>
+        <input {...register (`products[${index}].pricing.price`,  {required: 'Miktar Giriniz', min:{value: 1, message: "Miktar 0'dan büyük olmalı"}})} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number" onKeyDown={(event) => {justNumber(event)}}/>
+        <p className='text-red-500 font-semibold text-sm mt-1 w-24'>{errors.products?.[index]?.pricing?.price?.message}</p>
       </div>
 
       <div>
-        <select className='w-20 px-1 h-11 py-3' {...register(`${pricingId}-curreneyUnit`, {required: 'Para Seçiniz!'})}>
-          <option value="">Para Yok</option>
-          <option value={'Para 1'}>Para 1</option>
-          <option value={'Para 2'}>Para 2</option>
-          <option value={'Para 3'}>Para 3</option>
-        </select>
-        <p className='text-red-500 font-semibold text-sm mt-1'>{errors[`${pricingId}-curreneyUnit`]?.message}</p>
+        <input type="text" list="currencyUnitData" className='w-28 px-3 h-11 py-3' {...register(`products[${index}].pricing.currencyUnit`, {required: 'Para Birimi Seçiniz!'})} placeholder='Seçiniz...' onKeyPress={(event) => justText(event)} />
+        <datalist id="currencyUnitData">
+          <option value={'TL'}>TL</option>
+          <option value={'Euro'}>Euro</option>
+          <option value={'Dolar'}>Dolar</option>
+        </datalist>
+        <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.pricing?.currencyUnit?.message}</p>
       </div>
 
-      {/* <div className='rounded text-black py-0.5 w-16 h-11 px-2 bg-white'>
-        empty
-      </div> */}
       <div>
-        <input {...register (`${pricingId}-totalPrice`, {required: 'Toplam Adet Giriniz!'})} className='rounded text-black py-0.5 w-16 h-11 px-2'
-          defaultValue={
-            (productDesignEvent && productDesignEvent[pricingId - 1] && price) ? productDesignEvent[pricingId - 1].reduce((total, val) => total + parseInt(val.amount), 0) * price : ''
-          } type="text" />
+        <input readOnly {...register (`products[${index}].pricing.totalPrice`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"  value={totalPrice} />
       </div>
       
     </>

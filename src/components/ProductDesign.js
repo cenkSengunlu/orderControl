@@ -1,38 +1,19 @@
-import React, {useState, useContext} from 'react';
-import ProductDesignContext from '../context/ProductDesignContext';
+import React  from 'react';
+import { useFieldArray } from "react-hook-form";
 import ProductDesignItems from './ProductDesignItems';
+// import ProductDesignContext from '../context/ProductDesignContext';
+// import ProductDesignItems from './ProductDesignItems';
 
 
-function ProductDesign({productDesignId}) {
-  const [i, setI] = useState(1);
-  const {productDesignEvent, setProductDesignEvent} = useContext(ProductDesignContext);
 
-  const handleClick = () => {
-
-    setI(prev => prev + 1);
-    const item = {
-      id: i,
-      amount: '',
-      colors: '',
-      patterns: '',
-      groups: ''
-    }
-    // const list = [...productDesignEvent, item];
-    let list = productDesignEvent;
-    
-    list[productDesignId - 1] = list[productDesignId - 1] ? [...list[productDesignId - 1], item] : [...[], item];
-    console.log(list);
-    // setProductDesignObj(productDesignObj => ({...productDesignObj, [`${productDesignId}-productDesignItem`]: [...list] }));
-    setProductDesignEvent(list);
-    // // console.log('eklendi');
-    // console.log(productDesignObj);
-    // console.log([...productDesignEvent, item]);
-
-    // let list2 = productDesignEvent;
-    
-    // list2[productDesignId - 1] = list2[productDesignId - 1] ? [...list2[productDesignId - 1], item] : [...[], item];
-    // console.log(list2);
-  }
+function ProductDesign({index, control, register, errors, watchAllFields}) {
+    const { fields, append, update, remove } = useFieldArray({
+        control,
+        name: `products[${index}].productDesignItems`,
+        defaultValues: {
+          [`products[${index}].productDesignItems`]: []
+        }
+      });
 
   return (
     <>
@@ -52,16 +33,43 @@ function ProductDesign({productDesignId}) {
         <div className='flex justify-start ml-2 w-32'>
           <p className='text-center text-white font-semibold'>MİKTAR</p>
         </div>
-        {productDesignEvent[productDesignId - 1] && productDesignEvent[productDesignId - 1].map((item, index) => {
+
+        {fields.map((field, sub_index) => (
+          <ProductDesignItems
+            control={control}
+            update={update}
+            index={index}
+            sub_index={sub_index}
+            register={register}
+            remove={remove}
+            errors={errors}
+            watchAllFields={watchAllFields}
+            key={field.id}
+          />
+      ))}
+
+
+        {/* {productDesignEvent[productDesignId - 1] && productDesignEvent[productDesignId - 1].map((item, index) => {
             return(
               <ProductDesignItems productDesignItem={item} productDesignId={productDesignId} itemId={item.id} itemIndex={index} key={index}/>
             )
-          })}
+          })} */}
       </div>
       <div className='w-full flex justify-center select-none mt-3'>
-        <div className="w-36 bg-zinc-400 border-2 border-zinc-800 flex justify-center cursor-pointer items-center rounded-full" onClick={() => handleClick()}>
-          <div className="border-2 rounded-full px-0.5 border-zinc-800 text-white font-semibold text-lg">+</div>
-        </div>
+        <button
+          className='w-36 bg-zinc-400 border-2 border-zinc-800 flex justify-center cursor-pointer items-center rounded-full'
+          type="button"
+          onClick={() => {
+            append({
+              designGroups: '',
+              designPatterns: '',
+              designColors: '',
+              amount: 0
+            })
+          }}
+        >
+          <div className='border-2 rounded-full px-0.5 border-zinc-800 text-white font-semibold text-lg'>+</div>
+        </button>
       </div>
     </>
     

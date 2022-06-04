@@ -1,135 +1,122 @@
-import React, {useState, useEffect} from 'react';
-import {useFormContext} from 'react-hook-form';
+import React, {useState} from 'react';
 import ContentHeightWidth from './ContentHeightWidth';
-import '../Toggle.css'
+import '../Toggle.css';
+import justText from '../justText';
+import justNumber from '../justNumber';
 
-function Content({selectedItem, productId, contentIndex}) {
-
-  // const [content, setContent] = useState([]);
+function Content({selectedItem, index, sub_index, register, errors, watchAllFields}) {
   const [weightChecked, setWeightChecked] = useState(false);
   const [sizeChecked, setSizeChecked] = useState(false);
-  const {register, unregister, formState: {errors}} = useFormContext({mode:'onBlur',});
 
   const handleChangeWeight = () => {
-    // console.log(`${index} checked`);
     weightChecked ? setWeightChecked(false) : setWeightChecked(true);
   }
 
-  useEffect(() => {
-    if(!selectedItem){
-      return;
-    }
-    console.log("Use Effect!");
-    return () => {
-      console.log("Unmount");
-      unregister([`${contentIndex + 1}-contentHeight`, `${contentIndex + 1}-contentWidth`, `${contentIndex + 1}-readySize`, `${contentIndex + 1}-readySizeToggle`, `${contentIndex + 1}-sticth`, `${contentIndex + 1}-piece`, `${contentIndex + 1}-weight`, `${contentIndex + 1}-weightToggle`]);
-    }
-  }, [selectedItem, contentIndex, unregister]);
-
   const handleChangeSize = () => {
-    // console.log(`${index} checked:` + sizeChecked);
     sizeChecked ? setSizeChecked(false) : setSizeChecked(true);
   }
 
-  return (
+  return(
+    
+
     <>
-      {selectedItem && 
+      {selectedItem &&
         <>
           <div className='w-full my-10 p-2 border-2 border-zinc-300 rounded'>
+
             <div>
-              <p className='py-1 px-2 bg-zinc-300 border-2 border-black rounded bg-zinc-100 flex justify-center items-center text-lg font-medium '>
-                {selectedItem}
-              </p>
+              <input type="text" readOnly {...register(`products[${index}].content[${sub_index}].contentName`, {required: 'Boyut Seçiniz!'})} className='py-1 px-2 bg-zinc-300 border-2 border-black rounded bg-zinc-100 text-center text-lg font-medium' value={selectedItem.contentName}/>
             </div>
 
             <div className='flex justify-between'>
               <div className='flex flex-col'>
-                <div className=' w-32 h-18'>
-                  {!sizeChecked &&
-                    <ContentHeightWidth productId={productId} index={contentIndex + 1} />
-                  }
+                <div className=' w-32 h-fit'>
 
-                  {sizeChecked &&
-                    <div className='h-16'>
-                      <select className='w-full px-3 py-3 mt-2' {...register(`${productId}-${contentIndex + 1}-readySize`, {required: 'Ebad Seçiniz!'})}>
-                        <option value="">Ebad Türü</option>
-                        <option value={'Ebad 1'}>Ebad 1</option>
-                        <option value={'Ebad 2'}>Ebad 2</option>
-                        <option value={'Ebad 3'}>Ebad 3</option>
-                      </select>
-                      <p className='text-red-500 font-semibold text-xs px-1 mt-1'>{errors[`${productId}-${contentIndex + 1}-readySize`]?.message}</p>
-                    </div>
-                  }
                   
-                  <div className='flex mt-1 justify-between'>
+
+                  
+                    <div className='h-20 mt-1'>
+                      <p className='font-medium text-sm '>EBAD:</p>
+                        {!sizeChecked &&
+                          <ContentHeightWidth index={index} sub_index={sub_index} register={register} errors={errors} />
+                        }
+                        {sizeChecked &&
+                          <div>
+                            <input type="text" list="readySizeData" className='w-full px-3 py-3 mt-1' {...register(`products[${index}].content[${sub_index}].contentReadySize`, {required: 'Boyut Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
+                            <datalist id="readySizeData">
+                              <option value={'Ebad Bir'}>Ebad Bir</option>
+                              <option value={'Ebad İki'}>Ebad İki</option>
+                              <option value={'Ebad Üç'}>Ebad Üç</option>
+                            </datalist>
+                            <p className='text-red-500 font-semibold text-sm'>{errors.products?.[index]?.content?.[sub_index]?.contentReadySize?.message}</p>
+                          </div>
+                        }
+                      
+                    </div>
+                  
+
+                  <div className='flex mt-3 justify-between'>
                     <p className='text-white font-medium text-md'>Hazır Ebad</p>
 
                     <div className="checkBox flex items-center">
                       <label className="switch">
-                        <input type="checkbox" {...register (`${productId}-${contentIndex + 1}-readySizeToggle`)} onChange={() => handleChangeSize()}/>
+                        <input type="checkbox" {...register (`products[${index}].content[${sub_index}].readySizeSelected`)} onChange={() => handleChangeSize()}/>
                         <span className="slider round"></span>
                       </label>
                     </div>
                   </div>
+                  <div>
+                  <p className='font-medium text-sm mt-1'>DİKİŞ:</p>
+                  <input type="text" list="sticthData" className='w-full px-3 py-3 mt-1' {...register(`products[${index}].content[${sub_index}].contentStitch`, {required: 'Dikiş Türü Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
+                  <datalist id="sticthData">
+                    <option value={'Dikiş Bir'}>Dikiş Bir</option>
+                    <option value={'Dikiş İki'}>Dikiş İki</option>
+                    <option value={'Dikiş Üç'}>Dikiş Üç</option>
+                  </datalist>
+                  <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentStitch?.message}</p>
+                </div>
+                </div>
                   
-                </div>
-                
-
-                <div>
-                  <select className='w-full px-2 py-3 mt-2 h-18' {...register(`${productId}-${contentIndex + 1}-sticth`, {required: 'Dikiş Türü Seçiniz!'})}>
-                    <option value="">Dikiş Türü</option>
-                    <option value={'Dikiş 1'}>Dikiş 1</option>
-                    <option value={'Dikiş 2'}>Dikiş 2</option>
-                    <option value={'Dikiş 3'}>Dikiş 3</option>
-                  </select>
-                  <p className='text-red-500 font-semibold text-xs px-1 mt-1'>{errors[`${productId}-${contentIndex + 1}-sticth`]?.message}</p>
-                </div>
                 
               </div>
 
               <div className='flex flex-col w-24 mt-1'>
                 <div className='flex flex-col'>
-                  <p className='font-medium text-sm '>ADET:</p>
-                  <input {...register (`${productId}-${contentIndex + 1}-piece`, {required: 'Ürün Adeti Giriniz!'})} className='rounded text-black py-0.5 px-2 w-full' min='0' type="number"/>
-                  <p className='text-red-500 font-semibold text-xs px-1 mt-1'>{errors[`${productId}-${contentIndex + 1}-piece`]?.message}</p>
+                  <p className='font-medium text-sm mb-1'>ADET:</p>
+                  <input {...register (`products[${index}].content[${sub_index}].contentPiece`, {required: 'Ürün Adeti Giriniz!', min:{value: 1, message: "Ürün Adeti 0'dan büyük olmalı"}})} className='rounded text-black py-0.5 px-2 w-full' min='0' type="number" onKeyPress={(event) => justNumber(event)}/>
+                  <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentPiece?.message}</p>
                 </div>
 
                 <div className='flex mt-3 justify-between'>
                   <p className='text-white font-medium text-md'>Gramaj</p>
                   <div className="checkBox flex items-center">
                     <label className="switch">
-                      <input type="checkbox" {...register (`${productId}-${contentIndex + 1}-weightToggle`)} onChange={() => handleChangeWeight()}/>
+                      <input type="checkbox" {...register (`products[${index}].content[${sub_index}].weightSelected`)} onChange={() => handleChangeWeight()}/>
                       <span className="slider round"></span>
                     </label>
                   </div>
                 </div>
-                <div>
-                  <select className='w-full pl-2 py-3 mt-2 h-18' {...register(`${productId}-${contentIndex + 1}-weight`, {
-                    required: weightChecked ? 'Gramaj Seçiniz!' : false,
-                    disabled: !weightChecked
-                  })} disabled={!weightChecked}>
-                    <option value="">Gramaj</option>
-                    <option value={'Gramaj 1'}>Gramaj 1</option>
-                    <option value={'Gramaj 2'}>Gramaj 2</option>
-                    <option value={'Gramaj 3'}>Gramaj 3</option>
-                  </select>
-                  
-                  <p className='text-red-500 font-semibold text-xs px-1 mt-1'>{weightChecked? errors[`${productId}-${contentIndex + 1}-weight`]?.message : ''}</p>
+
+                <div className='flex flex-col'>
+                  {!weightChecked &&
+                    <div>
+                      <input {...register (`products[${index}].content[${sub_index}].contentWeight`, {required: 'Gramaj Giriniz!', min:{value: 1, message: "Gramaj 0'dan büyük olmalı"}})} className='rounded text-black py-0.5 px-2 w-full mt-2' min='0' type="number" onKeyPress={(event) => justNumber(event)}/>
+                    </div>
+                  }
+                  {weightChecked &&
+                    <div>
+                      <input type="text" list="weightData" className='w-full px-3 py-3 mt-2' {...register(`products[${index}].content[${sub_index}].contentWeight`, {required: 'Gramaj Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
+                      <datalist id="weightData">
+                        <option value={'Gramaj Bir'}>Gramaj Bir</option>
+                        <option value={'Gramaj İki'}>Gramaj İki</option>
+                        <option value={'Gramaj Üç'}>Gramaj Üç</option>
+                      </datalist>
+                    </div>
+                  }
+                  <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentWeight?.message}</p>
                 </div>
               </div>
-
             </div>
-            
-
-            
-            
-
-
-            
-
-
-            
-            
 
           </div>
         </>
