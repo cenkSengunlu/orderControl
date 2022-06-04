@@ -1,3 +1,3 @@
 The project is currently in beta
 <br>
-Deployed Website -> cenksengunlu.github.io/orderControl/
+Deployed Website -> https://cenksengunlu.github.io/orderControl/
