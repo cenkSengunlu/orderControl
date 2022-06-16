@@ -3,8 +3,9 @@ import ContentHeightWidth from './ContentHeightWidth';
 import '../Toggle.css';
 import justText from '../justText';
 import justNumber from '../justNumber';
+import SearchableDropdown from './SearchableDropdown';
 
-function Content({selectedItem, index, sub_index, register, errors, watchAllFields}) {
+function Content({selectedItem, index, sub_index, register, errors, control}) {
   const [weightChecked, setWeightChecked] = useState(false);
   const [sizeChecked, setSizeChecked] = useState(false);
 
@@ -16,13 +17,31 @@ function Content({selectedItem, index, sub_index, register, errors, watchAllFiel
     sizeChecked ? setSizeChecked(false) : setSizeChecked(true);
   }
 
+  const contentReadySizeDataOptions = [
+    { value: "Ebad Bir"},
+    { value: "Ebad İki"},
+    { value: "Ebad Üç"}
+  ];
+
+  const contentStitchDataOptions = [
+    { value: "Dikiş Bir", label: "Dikiş Bir" },
+    { value: "Dikiş İki", label: "Dikiş İki" },
+    { value: "Dikiş Üç", label: "Dikiş Üç" }
+  ];
+
+  const contentWeightDataOptions = [
+    { value: "Gramaj Bir", label: "Gramaj Bir" },
+    { value: "Gramaj İki", label: "Gramaj İki" },
+    { value: "Gramaj Üç", label: "Gramaj Üç" }
+  ];
+
   return(
     
 
     <>
       {selectedItem &&
         <>
-          <div className='w-full my-10 p-2 border-2 border-zinc-300 rounded'>
+          <div className='w-full my-10 p-2 border-2 border-zinc-500 bg-gray-400 rounded'>
 
             <div>
               <input type="text" readOnly {...register(`products[${index}].content[${sub_index}].contentName`, {required: 'Boyut Seçiniz!'})} className='py-1 px-2 bg-zinc-300 border-2 border-black rounded bg-zinc-100 text-center text-lg font-medium' value={selectedItem.contentName}/>
@@ -42,12 +61,7 @@ function Content({selectedItem, index, sub_index, register, errors, watchAllFiel
                         }
                         {sizeChecked &&
                           <div>
-                            <input type="text" list="readySizeData" className='w-full px-3 py-3 mt-1' {...register(`products[${index}].content[${sub_index}].contentReadySize`, {required: 'Boyut Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
-                            <datalist id="readySizeData">
-                              <option value={'Ebad Bir'}>Ebad Bir</option>
-                              <option value={'Ebad İki'}>Ebad İki</option>
-                              <option value={'Ebad Üç'}>Ebad Üç</option>
-                            </datalist>
+                            <SearchableDropdown register={register} control={control} options={contentReadySizeDataOptions} inputName={`products[${index}].content[${sub_index}].contentReadySize`} errorMessage='Boyut Seçiniz!' placeholder='Seçiniz...' />
                             <p className='text-red-500 font-semibold text-sm'>{errors.products?.[index]?.content?.[sub_index]?.contentReadySize?.message}</p>
                           </div>
                         }
@@ -66,15 +80,10 @@ function Content({selectedItem, index, sub_index, register, errors, watchAllFiel
                     </div>
                   </div>
                   <div>
-                  <p className='font-medium text-sm mt-1'>DİKİŞ:</p>
-                  <input type="text" list="sticthData" className='w-full px-3 py-3 mt-1' {...register(`products[${index}].content[${sub_index}].contentStitch`, {required: 'Dikiş Türü Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
-                  <datalist id="sticthData">
-                    <option value={'Dikiş Bir'}>Dikiş Bir</option>
-                    <option value={'Dikiş İki'}>Dikiş İki</option>
-                    <option value={'Dikiş Üç'}>Dikiş Üç</option>
-                  </datalist>
-                  <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentStitch?.message}</p>
-                </div>
+                    <p className='font-medium text-sm mt-1'>DİKİŞ:</p>
+                    <SearchableDropdown register={register} control={control} options={contentStitchDataOptions} inputName={`products[${index}].content[${sub_index}].contentStitch`} errorMessage='Dikiş Türü Seçiniz!' placeholder='Seçiniz...' />
+                    <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentStitch?.message}</p>
+                  </div>
                 </div>
                   
                 
@@ -105,12 +114,7 @@ function Content({selectedItem, index, sub_index, register, errors, watchAllFiel
                   }
                   {weightChecked &&
                     <div>
-                      <input type="text" list="weightData" className='w-full px-3 py-3 mt-2' {...register(`products[${index}].content[${sub_index}].contentWeight`, {required: 'Gramaj Seçiniz!'})} placeholder='Seçiniz...'  onKeyPress={(event) => justText(event)}/>
-                      <datalist id="weightData">
-                        <option value={'Gramaj Bir'}>Gramaj Bir</option>
-                        <option value={'Gramaj İki'}>Gramaj İki</option>
-                        <option value={'Gramaj Üç'}>Gramaj Üç</option>
-                      </datalist>
+                      <SearchableDropdown register={register} control={control} options={contentWeightDataOptions} inputName={`products[${index}].content[${sub_index}].contentWeight`} errorMessage='Gramaj Seçiniz!' placeholder='Seçiniz...' />
                     </div>
                   }
                   <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.content?.[sub_index]?.contentWeight?.message}</p>

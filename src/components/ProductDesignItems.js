@@ -1,8 +1,27 @@
 import React from 'react';
 import justNumber from '../justNumber';
-import justText from '../justText';
+// import justText from '../justText';
+import SearchableDropdown from './SearchableDropdown';
 
-function ProductDesignItems({index, sub_index, register, remove, update, errors, watchAllFields}) {
+function ProductDesignItems({index, sub_index, register, remove, update, errors, watchAllFields, control}) {
+  const designGroupsDataOptions = [
+    { value: "Marka Bir", label: "Marka Bir" },
+    { value: "Marka İki", label: "Marka İki" },
+    { value: "Marka Üç", label: "Marka Üç" }
+  ];
+
+  const designPatternsDataOptions = [
+    { value: "Desen Bir", label: "Desen Bir" },
+    { value: "Desen İki", label: "Desen İki" },
+    { value: "Desen Üç", label: "Desen Üç" }
+  ];
+
+  const designColorsDataOptions = [
+    { value: "Renk Bir", label: "Renk Bir" },
+    { value: "Renk İki", label: "Renk İki" },
+    { value: "Renk Üç", label: "Renk Üç" }
+  ];
+
   return (
     <>
       { 
@@ -18,32 +37,17 @@ function ProductDesignItems({index, sub_index, register, remove, update, errors,
           </div>
           
           <div>
-            <input type="text" list="designGroupsData" className='w-36 px-3 h-11 py-3' {...register(`products[${index}].productDesignItems[${sub_index}].designGroups`, {required: 'Grup Seçiniz!' })} placeholder='Grup Yok'  onKeyPress={(event) => justText(event)}/>
-            <datalist id="designGroupsData">
-                <option value={'Grup Bir'}>Grup Bir</option>
-                <option value={'Grup İki'}>Grup İki</option>
-                <option value={'Grup Üç'}>Grup Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={designGroupsDataOptions} inputName={`products[${index}].productDesignItems[${sub_index}].designGroups`} errorMessage='Grup Seçiniz!' placeholder='Grup Yok' />
             <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.productDesignItems?.[sub_index]?.designGroups?.message}</p>
           </div>
 
           <div>
-            <input type="text" list="designPatternsData" className='w-36 px-3 h-11 py-3' {...register(`products[${index}].productDesignItems[${sub_index}].designPatterns`, {required: 'Desen Seçiniz!'})} placeholder='Desen Yok'  onKeyPress={(event) => justText(event)}/>
-            <datalist id="designPatternsData">
-              <option value={'Desen Bir'}>Desen Bir</option>
-              <option value={'Desen İki'}>Desen İki</option>
-              <option value={'Desen Üç'}>Desen Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={designPatternsDataOptions} inputName={`products[${index}].productDesignItems[${sub_index}].designPatterns`} errorMessage='Desen Seçiniz!' placeholder='Desen Yok' />
             <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.productDesignItems?.[sub_index]?.designPatterns?.message}</p>
           </div>
 
           <div>
-            <input type="text" list="designColorsData" className='w-36 px-3 h-11 py-3' {...register(`products[${index}].productDesignItems[${sub_index}].designColors`, {required: 'Renk Seçiniz!'})} placeholder='Renk Yok' onKeyPress={(event) => justText(event)} />
-            <datalist id="designColorsData">
-              <option value={'Renk Bir'}>Renk Bir</option>
-              <option value={'Renk İki'}>Renk İki</option>
-              <option value={'Renk Üç'}>Renk Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={designColorsDataOptions} inputName={`products[${index}].productDesignItems[${sub_index}].designColors`} errorMessage='Renk Seçiniz!' placeholder='Renk Yok' />
             <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.productDesignItems?.[sub_index]?.designColors?.message}</p>
           </div>
           

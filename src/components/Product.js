@@ -5,7 +5,7 @@ import ProductDesign from './ProductDesign';
 import Content from './Content';
 import Pricing from './Pricing';
 
-function Product({ control, index, register, productRemove, errors, watchAllFields }) {
+function Product({ control, index, register, productRemove, errors, setError, setValue, watchAllFields }) {
 
   const { fields, append, remove: contentRemove, update } = useFieldArray({
     control,
@@ -17,12 +17,12 @@ function Product({ control, index, register, productRemove, errors, watchAllFiel
 
   return (
     <>
-      <div className='flex grid grid-flow-col auto-cols-max gap-6 w-fit bg-zinc-600 px-4 py-3'>
-        <div className='text-white flex flex-col'>
+      <div className='flex grid grid-flow-col auto-cols-max gap-6 w-fit bg-zinc-300 px-4 py-3 text-gray-700 border-2 border-zinc-500 mx-3 rounded-lg'>
+        <div className='flex flex-col'>
           <p className='font-semibold'>SIRA</p>
-          <p className='my-4'>{index + 1}</p>
+          <p className='my-4 font-semibold'>{index + 1}</p>
           <button
-            className="remove w-fit bg-red-500 rounded-md border-2 border-red-600 p-2 mb-2 text-sm font-medium cursor-pointer select-none"
+            className="remove w-fit bg-red-500 text-white rounded-md border-2 border-red-600 p-2 mb-2 text-sm font-medium cursor-pointer select-none"
             type="button"
             onClick={() => productRemove(index)}
           >
@@ -31,12 +31,12 @@ function Product({ control, index, register, productRemove, errors, watchAllFiel
         </div>
 
         <div>
-          <p className='text-center text-white font-semibold'>SEÇİMLER</p>
-          <Selections index={index} register={register} errors={errors} update={update} append={append} fields={fields} contentRemove={contentRemove}/>
+          <p className='text-center font-semibold'>SEÇİMLER</p>
+          <Selections index={index} register={register} control={control} errors={errors} update={update} append={append} fields={fields} contentRemove={contentRemove}/>
         </div>
 
         <div className=''>
-          <p className='text-center text-white font-semibold'>ÜRÜN İÇERİĞİ</p>
+          <p className='text-center font-semibold'>ÜRÜN İÇERİĞİ</p>
             <div className='w-64'>
               {
                 fields.map((field, sub_index) => {
@@ -48,7 +48,6 @@ function Product({ control, index, register, productRemove, errors, watchAllFiel
                       sub_index={sub_index}
                       register={register}
                       errors={errors}
-                      watchAllFields={watchAllFields}
                       key={field.id} 
 
                     />)
@@ -59,28 +58,29 @@ function Product({ control, index, register, productRemove, errors, watchAllFiel
         </div>
 
         <div>
-          <ProductDesign index={index} control={control} register={register} errors={errors} watchAllFields={watchAllFields}/>
+          <ProductDesign index={index} control={control} register={register} errors={errors} watchAllFields={watchAllFields} setError={setError} />
+          
         </div>
 
         <div className='grid grid-cols-5 place-items-stretch h-fit gap-4 flex items-start'>
           
           <div className='w-16 h-12 flex justify-center items-end'>
-            <p className='text-center text-white font-semibold'>TOPLAM ADET</p>
+            <p className='text-center font-semibold'>TOPLAM ADET</p>
           </div>
           <div className='w-16 h-12 flex items-end justify-center'>
-            <p className='text-center text-white font-semibold'>BİRİM (ÖLÇÜ)</p>
+            <p className='text-center font-semibold'>BİRİM (ÖLÇÜ)</p>
           </div>
           <div className='w-16 h-12 flex items-end justify-center'>
-            <p className='text-center text-white font-semibold'>FİYAT</p>
+            <p className='text-center font-semibold'>FİYAT</p>
           </div>
           <div className='w-16 h-12 flex items-end justify-center'>
-            <p className='text-center text-white font-semibold'>BİRİM (PARA)</p>
+            <p className='text-center font-semibold'>BİRİM (PARA)</p>
           </div>
           <div className='w-16 h-12 flex items-end justify-center'>
-            <p className='text-center text-white font-semibold'>TOPLAM</p>
+            <p className='text-center font-semibold'>TOPLAM</p>
           </div>
           
-          <Pricing index={index} register={register} errors={errors} watchAllFields={watchAllFields} />
+          <Pricing index={index} register={register} control={control} setValue={setValue} errors={errors} watchAllFields={watchAllFields} />
         </div>
         
         

@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, {useEffect}  from 'react';
 import { useFieldArray } from "react-hook-form";
 import ProductDesignItems from './ProductDesignItems';
 // import ProductDesignContext from '../context/ProductDesignContext';
@@ -6,14 +6,23 @@ import ProductDesignItems from './ProductDesignItems';
 
 
 
-function ProductDesign({index, control, register, errors, watchAllFields}) {
-    const { fields, append, update, remove } = useFieldArray({
-        control,
-        name: `products[${index}].productDesignItems`,
-        defaultValues: {
-          [`products[${index}].productDesignItems`]: []
-        }
-      });
+function ProductDesign({index, control, register, errors, setError, watchAllFields}) {
+  const { fields, append, update, remove } = useFieldArray({
+      control,
+      name: `products[${index}].productDesignItems`,
+      defaultValues: {
+        [`products[${index}].productDesignItems`]: []
+      }
+    });
+
+    useEffect(() => {
+      console.log(errors);
+      if (!fields.length) {
+        setError(`products[${index}].productDesignItems`, { type: 'custom', message: 'custom message' });
+      }
+      
+    }, [fields]);
+
 
   return (
     <>
@@ -70,6 +79,8 @@ function ProductDesign({index, control, register, errors, watchAllFields}) {
         >
           <div className='border-2 rounded-full px-0.5 border-zinc-800 text-white font-semibold text-lg'>+</div>
         </button>
+        <p className='text-red-500 font-semibold text-sm mt-1'>{errors?.products?.[index]?.productDesignItems?.message}</p>
+          
       </div>
     </>
     

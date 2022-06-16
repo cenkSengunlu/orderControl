@@ -1,27 +1,44 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import justNumber from '../justNumber';
-import justText from '../justText';
+// import justText from '../justText';
+import SearchableDropdown from './SearchableDropdown';
 
-function Pricing({index, register, errors, watchAllFields}) {
+function Pricing({index, register, errors, setValue, watchAllFields, control}) {
   const totalNumber = watchAllFields.products[`${index}`].productDesignItems.reduce((total, val) => total + parseInt(val.amount), 0);
   const totalPrice = totalNumber && watchAllFields.products[`${index}`].pricing.price ? totalNumber * watchAllFields.products[`${index}`].pricing.price : 0;
+
+  useEffect(() => {
+    setValue(`products[${index}].pricing.totalPrice`, totalPrice);
+  },[totalPrice]);
+
+  useEffect(() => {
+    setValue(`products[${index}].pricing.totalNumber`, totalNumber);
+  },[totalNumber]);
+
+  const unitSizeDataOptions = [
+    { value: "Ölçü Bir", label: "Ölçü Bir" },
+    { value: "Ölçü İki", label: "Ölçü İki" },
+    { value: "Ölçü Üç", label: "Ölçü Üç" }
+  ];
+
+  const currencyUnitDataOptions = [
+    { value: "TL", label: "TL" },
+    { value: "EURO", label: "EURO" },
+    { value: "DOLAR", label: "DOLAR" }
+  ];
+
 
   return (
     <>
       <div className='flex flex-col items-start justify-center w-16'>
-        <input readOnly {...register (`products[${index}].pricing.totalNumber`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"  value={totalNumber} />
+        <input {...register (`products[${index}].pricing.totalNumber`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"  readOnly />
       </div>
 
       
 
 
       <div>
-        <input type="text" list="unitSizeData" className='w-28 px-3 h-11 py-3' {...register(`products[${index}].pricing.unitSize`, {required: 'Ölçü Seçiniz!'})} placeholder='Seçiniz...' onKeyPress={(event) => justText(event)} />
-        <datalist id="unitSizeData">
-          <option value={'Ölçü Bir'}>Ölçü Bir</option>
-          <option value={'Ölçü İki'}>Ölçü İki</option>
-          <option value={'Ölçü Üç'}>Ölçü Üç</option>
-        </datalist>
+        <SearchableDropdown register={register} control={control} options={unitSizeDataOptions} inputName={`products[${index}].pricing.unitSize`} errorMessage='Ölçü Seçiniz!' placeholder='Seçiniz...' />
         <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.pricing?.unitSize?.message}</p>
       </div>
 
@@ -31,17 +48,12 @@ function Pricing({index, register, errors, watchAllFields}) {
       </div>
 
       <div>
-        <input type="text" list="currencyUnitData" className='w-28 px-3 h-11 py-3' {...register(`products[${index}].pricing.currencyUnit`, {required: 'Para Birimi Seçiniz!'})} placeholder='Seçiniz...' onKeyPress={(event) => justText(event)} />
-        <datalist id="currencyUnitData">
-          <option value={'TL'}>TL</option>
-          <option value={'Euro'}>Euro</option>
-          <option value={'Dolar'}>Dolar</option>
-        </datalist>
+        <SearchableDropdown register={register} control={control} options={currencyUnitDataOptions} inputName={`products[${index}].pricing.currencyUnit`} errorMessage='Para Birimi Seçiniz!' placeholder='Seçiniz...' />
         <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.pricing?.currencyUnit?.message}</p>
       </div>
 
       <div>
-        <input readOnly {...register (`products[${index}].pricing.totalPrice`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number"  value={totalPrice} />
+        <input {...register (`products[${index}].pricing.totalPrice`)} className='rounded text-black py-0.5 w-16 h-11 px-2' min='0' type="number" readOnly  />
       </div>
       
     </>

@@ -1,13 +1,40 @@
 import React from 'react';
 import justText from '../justText';
 import justNumber from '../justNumber';
+import SearchableDropdown from './SearchableDropdown';
 
-function CustomerForm({register, errors}) {
+function CustomerForm({register, errors, control}) {
+
+  const deliveryDataOptions = [
+    { value: "Teslim Bir", label: "Teslim Bir" },
+    { value: "Teslim İki", label: "Teslim İki" },
+    { value: "Teslim Üç", label: "Teslim Üç" }
+  ];
+
+  const sellerDataOptions = [
+    { value: "Satıcı Bir", label: "Satıcı Bir" },
+    { value: "Satıcı İki", label: "Satıcı İki" },
+    { value: "Satıcı Üç", label: "Satıcı Üç" }
+  ];
+
+  const bankDataOptions = [
+    { value: "Banka Bir", label: "Banka Bir" },
+    { value: "Banka İki", label: "Banka İki" },
+    { value: "Banka Üç", label: "Banka Üç" }
+  ];
+
+  const paymentDataOptions = [
+    { value: "Nakit", label: "Nakit" },
+    { value: "Kredi Kartı", label: "Kredi Kartı" },
+    { value: "Altta Input Çıkacak", label: "Altta Input Çıkacak" }
+  ];
+
   return (
     <>
       <div className='px-5 flex justify-around w-full h-fit items-start flex-wrap'>
           <div>
             <div>ALICI ADI</div>
+            
             <input {...register ('customerName', {required: 'Alıcı Adı Giriniz!'})} className='border border-gray-500 rounded text-black py-0.5 px-2' type="text" placeholder="Alıcı İsmi Girin" onKeyPress={(event) => justText(event)}/>
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.customerName?.message}</p>
           </div>
@@ -21,12 +48,7 @@ function CustomerForm({register, errors}) {
 
           <div>
             <div>TESLİM</div>
-            <input type="text" list="deliveryData" {...register ('delivery', {required: 'Teslimat Seçiniz!'})} className='w-32 py-0.5 px-1 border border-gray-500' placeholder='Seçiniz...' onKeyPress={(event) => justText(event)}/>
-            <datalist id="deliveryData">
-              <option value="Teslim Bir">Teslim Bir</option>
-              <option value="Teslim İki">Teslim İki</option>
-              <option value="Teslim Üç">Teslim Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={deliveryDataOptions} inputName={`delivery`} errorMessage='Teslimat Seçiniz!' placeholder='Seçiniz...' />
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.delivery?.message}</p>
           </div>
 
@@ -38,35 +60,20 @@ function CustomerForm({register, errors}) {
 
           <div>
             <div>SATICI</div>
-            <input type="text" list="sellerData" {...register ('seller', {required: 'Satııcı Seçiniz!'})} className='w-32 py-0.5 px-1 border border-gray-500' placeholder='Seçiniz...' onKeyPress={(event) => justText(event)}/>
-            <datalist id="sellerData">
-              <option value="Satıcı Bir">Satıcı Bir</option>
-              <option value="Satıcı İki">Satıcı İki</option>
-              <option value="Satıcı Üç">Satıcı Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={sellerDataOptions} inputName={`seller`} errorMessage='Satıcı Seçiniz!' placeholder='Seçiniz...' />
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.seller?.message}</p>
           </div>
 
           <div>
             <div>BANKA</div>
-            <input type="text" list="bankData" {...register ('bank', {required: 'Banka Seçiniz!'})} className='w-32 py-0.5 px-1 border border-gray-500' placeholder='Seçiniz...' onKeyPress={(event) => justText(event)}/>
-            <datalist id="bankData">
-              <option value="Banka Bir">Banka Bir</option>
-              <option value="Banka İki">Banka İki</option>
-              <option value="Banka Üç">Banka Üç</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={bankDataOptions} inputName={`bank`} errorMessage='Banka Seçiniz!' placeholder='Seçiniz...' />
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.bank?.message}</p>
           </div>
 
 
           <div>
             <div>ÖDEME</div>
-            <input type="text" list="paymentData" {...register ('payment', {required: 'Ödeme Yöntemi Seçiniz!'})} className='w-32 py-0.5 px-1 border border-gray-500' placeholder='Seçiniz...' onKeyPress={(event) => justText(event)}/>
-            <datalist id="paymentData">
-              <option value="Nakit">Nakit</option>
-              <option value="Kredi Kartı">Kredi Kartı</option>
-              <option value="Altta Input Çıkacak">Altta Input Çıkacak</option>
-            </datalist>
+            <SearchableDropdown register={register} control={control} options={paymentDataOptions} inputName={`payment`} errorMessage='Ödeme Yöntemi Seçiniz!' placeholder='Seçiniz...' />
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.payment?.message}</p>
           </div>
 
