@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useFieldArray } from "react-hook-form";
 import Selections from './Selections';
 import ProductDesign from './ProductDesign';
 import Content from './Content';
 import Pricing from './Pricing';
 
-function Product({ control, index, register, productRemove, errors, setError, setValue, watchAllFields }) {
+function Product({ control, index, register, productRemove, submitCount, errors, setError, clearErrors, setValue, trigger, watchAllFields }) {
 
   const { fields, append, remove: contentRemove, update } = useFieldArray({
     control,
@@ -15,9 +15,19 @@ function Product({ control, index, register, productRemove, errors, setError, se
     }
   });
 
+  useEffect(() => {
+      
+    if (!fields.length && submitCount > 0) {
+
+      setError(`products[${index}].content`, { type: 'custom', message: 'İçerik Seçin!' });  
+      trigger(`products[${index}].content`);
+    }
+  }, [fields, setError, submitCount]);
+
   return (
     <>
-      <div className='flex grid grid-flow-col auto-cols-max gap-6 w-fit bg-zinc-300 px-4 py-3 text-gray-700 border-2 border-zinc-500 mx-3 rounded-lg'>
+      <div className='flex grid grid-flow-col auto-cols-max gap-6 w-fit  px-4 py-3 text-gray-700 border-2 border-zinc-500 mx-3 mb-2 rounded-lg  bg-zinc-200'>
+        
         <div className='flex flex-col'>
           <p className='font-semibold'>SIRA</p>
           <p className='my-4 font-semibold'>{index + 1}</p>
@@ -30,9 +40,19 @@ function Product({ control, index, register, productRemove, errors, setError, se
           </button>
         </div>
 
-        <div>
+        <div className='w-48'>
           <p className='text-center font-semibold'>SEÇİMLER</p>
-          <Selections index={index} register={register} control={control} errors={errors} update={update} append={append} fields={fields} contentRemove={contentRemove}/>
+          <Selections 
+            index={index} 
+            register={register} 
+            control={control} 
+            errors={errors} 
+            update={update} 
+            append={append} 
+            fields={fields} 
+            contentRemove={contentRemove}
+            clearErrors={clearErrors}
+          />
         </div>
 
         <div className=''>
@@ -55,14 +75,24 @@ function Product({ control, index, register, productRemove, errors, setError, se
                 })
               }
             </div>
+            <p className='text-red-500 font-semibold text-sm mt-1 text-center'>{errors?.products?.[index]?.content?.message}</p>
         </div>
 
-        <div>
-          <ProductDesign index={index} control={control} register={register} errors={errors} watchAllFields={watchAllFields} setError={setError} />
-          
+        <div className=''>
+          <ProductDesign 
+            index={index} 
+            submitCount={submitCount} 
+            control={control} 
+            register={register} 
+            errors={errors} 
+            trigger={trigger} 
+            watchAllFields={watchAllFields} 
+            setError={setError} 
+            clearErrors={clearErrors} 
+          />
         </div>
 
-        <div className='grid grid-cols-5 place-items-stretch h-fit gap-4 flex items-start'>
+        <div className='grid grid-cols-5 gap-4 auto-cols-min h-fit flex items-start'>
           
           <div className='w-16 h-12 flex justify-center items-end'>
             <p className='text-center font-semibold'>TOPLAM ADET</p>
@@ -80,7 +110,14 @@ function Product({ control, index, register, productRemove, errors, setError, se
             <p className='text-center font-semibold'>TOPLAM</p>
           </div>
           
-          <Pricing index={index} register={register} control={control} setValue={setValue} errors={errors} watchAllFields={watchAllFields} />
+          <Pricing 
+            index={index} 
+            register={register} 
+            control={control} 
+            setValue={setValue} 
+            errors={errors} 
+            watchAllFields={watchAllFields} 
+          />
         </div>
         
         

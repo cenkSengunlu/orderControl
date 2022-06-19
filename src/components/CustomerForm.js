@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import justText from '../justText';
 import justNumber from '../justNumber';
 import SearchableDropdown from './SearchableDropdown';
 
-function CustomerForm({register, errors, control}) {
+function CustomerForm({register, errors, control, watchAllFields}) {
+
+  useEffect(() => {
+    console.log(watchAllFields?.payment);
+  }, [watchAllFields]);
 
   const deliveryDataOptions = [
     { value: "Teslim Bir", label: "Teslim Bir" },
@@ -74,6 +78,13 @@ function CustomerForm({register, errors, control}) {
           <div>
             <div>ÖDEME</div>
             <SearchableDropdown register={register} control={control} options={paymentDataOptions} inputName={`payment`} errorMessage='Ödeme Yöntemi Seçiniz!' placeholder='Seçiniz...' />
+            { watchAllFields?.payment === 'Altta Input Çıkacak' &&
+            <>
+              <input {...register ('paymentSubInput', {required: 'paymentSubInput Doldurunuz!'})} className='border border-gray-500 rounded text-black py-0.5 px-2 mt-1 w-full' type="text" placeholder='Teslim İçin Özel Kod' onKeyPress={(event) => justText(event)}/>
+              <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.paymentSubInput?.message}</p>
+            </>
+              
+            }
             <p className='text-red-500 font-semibold text-sm px-1 mt-1'>{errors?.payment?.message}</p>
           </div>
 

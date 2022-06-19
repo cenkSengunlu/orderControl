@@ -3,7 +3,7 @@ import Multiselect from 'multiselect-react-dropdown';
 // import justText from '../justText';
 import SearchableDropdown from './SearchableDropdown';
 
-function Selections({index, register, errors, update, append, fields, contentRemove, control}) {
+function Selections({index, register, errors, update, append, fields, contentRemove, control, clearErrors}) {
   
   const [contentNames] = useState(['NEVRESİM', 'ÇARŞAF', 'STD. YASTIK KILIFI', 'OXF. YASTIK KILIFI', 'KIRLENT KILIFI']);
   
@@ -60,7 +60,7 @@ function Selections({index, register, errors, update, append, fields, contentRem
       {/* içerikler / Contents */}
       <div className='my-4'>
         <div>İçerikler:</div>
-        <div className='w-64 bg-white'>
+        <div className='bg-white'>
           <Multiselect
             isObject={false}
             displayValue='value'
@@ -73,9 +73,7 @@ function Selections({index, register, errors, update, append, fields, contentRem
             }}
             onKeyPressFn={function noRefCheck(){}}
             onRemove={(selectedList, removedItem) => {
-              contentRemove(fields.map((item) => item.contentName
-
-              ).indexOf(removedItem))
+              contentRemove(fields.map((item) => item.contentName).indexOf(removedItem))
             }}
             onSearch={function noRefCheck(){}}
             onSelect={(selectedList, selectedItem) => {
@@ -89,6 +87,9 @@ function Selections({index, register, errors, update, append, fields, contentRem
                 weightSelected: false,
                 contentStitch: ''
               })
+              if(errors?.products?.[index]?.content?.type === 'custom'){
+                clearErrors(`products[${index}].content`);
+              }
             }}
             options={contentNames}
             showCheckbox

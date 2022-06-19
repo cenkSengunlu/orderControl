@@ -48,7 +48,16 @@ function Pricing({index, register, errors, setValue, watchAllFields, control}) {
       </div>
 
       <div>
-        <SearchableDropdown register={register} control={control} options={currencyUnitDataOptions} inputName={`products[${index}].pricing.currencyUnit`} errorMessage='Para Birimi Seçiniz!' placeholder='Seçiniz...' />
+        <div className=''>
+          <SearchableDropdown 
+            register={register} 
+            control={control} 
+            options={currencyUnitDataOptions} 
+            inputName={`products[${index}].pricing.currencyUnit`} 
+            errorMessage='Para Birimi Seçiniz!' 
+            placeholder='Seçiniz...' 
+          />
+        </div>
         <p className='text-red-500 font-semibold text-sm mt-1'>{errors.products?.[index]?.pricing?.currencyUnit?.message}</p>
       </div>
 

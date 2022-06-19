@@ -18,9 +18,9 @@ function Content({selectedItem, index, sub_index, register, errors, control}) {
   }
 
   const contentReadySizeDataOptions = [
-    { value: "Ebad Bir"},
-    { value: "Ebad İki"},
-    { value: "Ebad Üç"}
+    { value: "Ebad Bir", label: "Ebad Bir"},
+    { value: "Ebad İki", label: "Ebad İki"},
+    { value: "Ebad Üç", label: "Ebad Üç"}
   ];
 
   const contentStitchDataOptions = [
@@ -41,10 +41,10 @@ function Content({selectedItem, index, sub_index, register, errors, control}) {
     <>
       {selectedItem &&
         <>
-          <div className='w-full my-10 p-2 border-2 border-zinc-500 bg-gray-400 rounded'>
+          <div className='w-full my-10 p-2 border-2 border-zinc-500 bg-zinc-300 rounded text-gray-700'>
 
             <div>
-              <input type="text" readOnly {...register(`products[${index}].content[${sub_index}].contentName`, {required: 'Boyut Seçiniz!'})} className='py-1 px-2 bg-zinc-300 border-2 border-black rounded bg-zinc-100 text-center text-lg font-medium' value={selectedItem.contentName}/>
+              <input type="text" readOnly {...register(`products[${index}].content[${sub_index}].contentName`)} className='py-1 px-2 bg-zinc-300 border-2 border-black rounded bg-zinc-100 text-center text-lg font-medium' value={selectedItem.contentName}/>
             </div>
 
             <div className='flex justify-between'>
@@ -55,13 +55,25 @@ function Content({selectedItem, index, sub_index, register, errors, control}) {
 
                   
                     <div className='h-20 mt-1'>
-                      <p className='font-medium text-sm '>EBAD:</p>
+                      
                         {!sizeChecked &&
-                          <ContentHeightWidth index={index} sub_index={sub_index} register={register} errors={errors} />
+                          <ContentHeightWidth 
+                            index={index} 
+                            sub_index={sub_index} 
+                            register={register} 
+                            errors={errors} 
+                          />
                         }
                         {sizeChecked &&
                           <div>
-                            <SearchableDropdown register={register} control={control} options={contentReadySizeDataOptions} inputName={`products[${index}].content[${sub_index}].contentReadySize`} errorMessage='Boyut Seçiniz!' placeholder='Seçiniz...' />
+                            <p className='font-medium text-sm '>EBAD:</p>
+                            <SearchableDropdown 
+                              register={register} 
+                              control={control} 
+                              options={contentReadySizeDataOptions} 
+                              inputName={`products[${index}].content[${sub_index}].contentReadySize`} 
+                              errorMessage='Boyut Seçiniz!' placeholder='Seçiniz...' 
+                            />
                             <p className='text-red-500 font-semibold text-sm'>{errors.products?.[index]?.content?.[sub_index]?.contentReadySize?.message}</p>
                           </div>
                         }
@@ -70,7 +82,7 @@ function Content({selectedItem, index, sub_index, register, errors, control}) {
                   
 
                   <div className='flex mt-3 justify-between'>
-                    <p className='text-white font-medium text-md'>Hazır Ebad</p>
+                    <p className='font-medium text-md'>Hazır Ebad</p>
 
                     <div className="checkBox flex items-center">
                       <label className="switch">
@@ -97,7 +109,7 @@ function Content({selectedItem, index, sub_index, register, errors, control}) {
                 </div>
 
                 <div className='flex mt-3 justify-between'>
-                  <p className='text-white font-medium text-md'>Gramaj</p>
+                  <p className='font-medium text-md'>Gramaj</p>
                   <div className="checkBox flex items-center">
                     <label className="switch">
                       <input type="checkbox" {...register (`products[${index}].content[${sub_index}].weightSelected`)} onChange={() => handleChangeWeight()}/>
