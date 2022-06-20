@@ -5,10 +5,6 @@ import SearchableDropdown from './SearchableDropdown';
 
 function CustomerForm({register, errors, control, watchAllFields}) {
 
-  useEffect(() => {
-    console.log(watchAllFields?.payment);
-  }, [watchAllFields]);
-
   const deliveryDataOptions = [
     { value: "Teslim Bir", label: "Teslim Bir" },
     { value: "Teslim İki", label: "Teslim İki" },

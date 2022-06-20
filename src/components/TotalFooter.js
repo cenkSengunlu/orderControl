@@ -3,7 +3,6 @@ import React from 'react';
 function TotalFooter({watchAllFields}) {
 
   const orderTotalPrice = watchAllFields.products && watchAllFields.products.reduce((acc, val) => {
-    // console.log(val.pricing.currencyUnit.value);
     acc[val.pricing.currencyUnit] = (acc[val.pricing.currencyUnit] || 0) + parseInt(val.pricing.totalPrice);
     return acc;
   }, {});
