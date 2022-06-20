@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/orderControl/static/css/main.d49c9fe5.css",
-    "main.js": "/orderControl/static/js/main.1562ef58.js",
+    "main.js": "/orderControl/static/js/main.a92f5ae8.js",
     "index.html": "/orderControl/index.html",
     "main.d49c9fe5.css.map": "/orderControl/static/css/main.d49c9fe5.css.map",
-    "main.1562ef58.js.map": "/orderControl/static/js/main.1562ef58.js.map"
+    "main.a92f5ae8.js.map": "/orderControl/static/js/main.a92f5ae8.js.map"
   },
   "entrypoints": [
     "static/css/main.d49c9fe5.css",
-    "static/js/main.1562ef58.js"
+    "static/js/main.a92f5ae8.js"
   ]
 }
