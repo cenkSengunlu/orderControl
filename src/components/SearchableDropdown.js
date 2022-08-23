@@ -2,13 +2,12 @@ import React from 'react';
 import Select from 'react-select';
 import { Controller } from "react-hook-form";
 
-function SearchableDropdown({register, control, inputName, errorMessage, options, placeholder, customStyleCss}) {
+function SearchableDropdown({register, control, inputName, errorMessage, options, placeholder}) {
 
   const colourStyles = {
     control: styles => ({ ...styles,
       border: '1px #374151 solid',
       height: '8px',
-      // width: customStyleCss ? '' : '256px'
     })
   };
   
